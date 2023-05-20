@@ -6,20 +6,21 @@ const { json } = require('express');
 
 // const register = require('./controllers/register');
 const login = require('./controllers/login');
+const user = require('./controllers/user');
 // const profile = require('./controllers/profile');
 // const image = require('./controllers/image');
 
-// const db = knex({
-//     client: 'pg',
-//     connection: {
-//         host : 'db-postgresql-sgp1-15352-do-user-13155646-0.b.db.ondigitalocean.com',
-//         port : 25060,
-//         user : 'soelak',
-//         password : 'AVNS_-5uWaHdDMgbBeMj2FYL',
-//         database : 'facerecognition-db',
-//         ssl: { rejectUnauthorized: false }
-//     }
-//   });
+const db = knex({
+    client: 'pg',
+    connection: {
+        host : 'ec2-54-208-11-146.compute-1.amazonaws.com',
+        port : 5432,
+        user : 'pfuwxvrtoynnxi',
+        password : '1e279abaf42c4ceaeae100ff12ff2b09e734b8f4270ae69078f62f54650471b8',
+        database : 'd52ivesgs26mdt',
+        ssl: { rejectUnauthorized: false }
+    }
+  });
 
 const app = express();
 
@@ -36,6 +37,8 @@ app.get('/', (req, res) =>
 })
 
 // app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) })
+
+app.get('/users', (req, res) => { user.getUsers(req, res, db)})
 
 app.get('/login', (req, res) => { login.handleLogIn(req, res)})
 
