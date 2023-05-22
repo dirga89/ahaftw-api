@@ -6,7 +6,7 @@ const cors = require('cors');
 const knex = require('knex');
 const { json } = require('express');
 
-const verifyToken = require('./controllers/authMiddleware');
+//const verifyToken = require('./controllers/authMiddleware');
 // const register = require('./controllers/register');
 const login = require('./controllers/login');
 const user = require('./controllers/user');
@@ -41,7 +41,7 @@ app.get('/', (req, res) =>
 
 // app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) })
 
-app.get('/user', verifyToken, (req, res) => { user.getUsers(req, res, db) });
+app.get('/user', (req, res) => { user.getUsers(req, res, db) });
 
 // REGISTER A USER
 app.post("/user", (req, res) => { user.postUser(req, res, db) });
