@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const getUsers = (req, res, db) => {
-    console.log(req.headers.authorization);
+    
     db.select('email')
     .from('users')
     .then(users => {
