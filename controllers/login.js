@@ -15,8 +15,8 @@ const handleLogIn = (req, res, db, bcrypt) =>
                 .where('email', '=', req.body.email)
                 .then(user => {
                     
-                    const accessToken = generateAccessToken( {user: req.body.email} );
-                    res.json( { user: user[0], accessToken: accessToken } );
+                    //const accessToken = generateAccessToken( {user: req.body.email} );
+                    res.json( { user: user[0]} );
                 })
                 .catch(err => res.status(400).json('no user'));
             }
