@@ -1,10 +1,9 @@
 require("dotenv").config();
 const express = require('express');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const knex = require('knex');
-const { json } = require('express');
 
 //const verifyToken = require('./controllers/authMiddleware');
 // const register = require('./controllers/register');
