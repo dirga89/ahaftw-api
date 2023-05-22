@@ -1,11 +1,12 @@
+const jwt = require('jsonwebtoken');
 
 const handleLogIn = (req, res, db, bcrypt) =>
 {
-    db.select('email', 'secret',)
-    .from('login')
+    db.select('email', 'password',)
+    .from('users')
     .where('email', '=', req.body.email)
     .then(data => {
-        bcrypt.compare(req.body.password, data[0].secret, function(err, response) 
+        bcrypt.compare(req.body.password, data[0].password, function(err, response) 
         {
             if(response)
             {
@@ -13,7 +14,9 @@ const handleLogIn = (req, res, db, bcrypt) =>
                 .from('users')
                 .where('email', '=', req.body.email)
                 .then(user => {
-                    res.json(user[0])
+                    
+                    const accessToken = generateAccessToken( {user: req.body.email} );
+                    res.json( { user: user[0], accessToken: accessToken } );
                 })
                 .catch(err => res.status(400).json('no user'));
             }
@@ -25,6 +28,19 @@ const handleLogIn = (req, res, db, bcrypt) =>
     })
     .catch(err => res.status(400).json('wrong credentials'));
     
+}
+
+// accessTokens
+function generateAccessToken(user) {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "15m"});
+}
+
+// refreshTokens
+let refreshTokens = [];
+function generateRefreshToken(user) {
+    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "20m"});
+    refreshTokens.push(refreshToken);
+    return refreshToken;
 }
 
 module.exports = {

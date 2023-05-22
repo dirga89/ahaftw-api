@@ -1,9 +1,12 @@
+require("dotenv").config();
 const express = require('express');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const knex = require('knex');
 const { json } = require('express');
 
+const verifyToken = require('./controllers/authMiddleware');
 // const register = require('./controllers/register');
 const login = require('./controllers/login');
 const user = require('./controllers/user');
@@ -21,10 +24,10 @@ const db = knex({
         ssl: { rejectUnauthorized: false }
     }
   });
-
+  
 const app = express();
 
-const port = process.env.PORT || 4001
+const port = process.env.PORT
 
 app.use(express.json());
 app.use(cors());
@@ -38,11 +41,12 @@ app.get('/', (req, res) =>
 
 // app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) })
 
-app.get('/users', (req, res) => { user.getUsers(req, res, db)})
+app.get('/user', verifyToken, (req, res) => { user.getUsers(req, res, db) });
 
-app.get('/login', (req, res) => { login.handleLogIn(req, res)})
+// REGISTER A USER
+app.post("/user", (req, res) => { user.postUser(req, res, db) });
 
-// app.post('/login', (req, res) => { signin.handleLogIn(req, res, db, bcrypt) })
+app.post('/login', (req, res) => { login.handleLogIn(req, res, db, bcrypt) });
 
 // app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
 
@@ -52,5 +56,5 @@ app.get('/login', (req, res) => { login.handleLogIn(req, res)})
 
 app.listen(port, () =>
 {
-    console.log(`app running on ${port}.`);
+    console.log(`server running on ${port}.`);
 });
